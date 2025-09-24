@@ -1,4 +1,4 @@
-package com.guruja.cafe_api.order;
+package com.guruja.cafe_api.order.repository;
 
 import org.springframework.stereotype.Repository;
 
