@@ -1,6 +1,7 @@
 package com.guruja.cafe_api.product.service;
 
 import com.guruja.cafe_api.product.dto.ProductListResDto;
+import com.guruja.cafe_api.product.dto.ProductSaveReqDto;
 import com.guruja.cafe_api.product.entity.Product;
 import com.guruja.cafe_api.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,15 @@ public class ProductService {
         }
 
         return productListResDtos;
+    }
+
+    public Product create(ProductSaveReqDto productSaveReqDto) {
+        Product product = Product.builder()
+                .name(productSaveReqDto.getName())
+                .description(productSaveReqDto.getDescription())
+                .price(productSaveReqDto.getPrice())
+                .build();
+
+        return productRepository.save(product);
     }
 }

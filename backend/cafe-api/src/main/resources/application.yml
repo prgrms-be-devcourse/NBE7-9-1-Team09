@@ -9,6 +9,6 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
     hibernate:
-      ddl-auto: create #when foreign key relationship is complicated, validate mode is recommended. update : maintain db data when restart app, so when first time we run app it should be create mode
+      ddl-auto: update #when foreign key relationship is complicated, validate mode is recommended. update : maintain db data when restart app, so when first time we run app it should be create mode
     show_sql: true
 
