@@ -1,0 +1,29 @@
+package com.guruja.cafe_api.product.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@NoArgsConstructor
+@Table(name = "products")
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(length = 255)
+    private String name;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column
+    private Integer price;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+}
