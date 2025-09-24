@@ -1,6 +1,7 @@
 package com.guruja.cafe_api.product.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,9 +22,15 @@ public class Product {
     private String description;
 
     @Column
-    private Integer price;
+    private int price;
 
     @Column(name = "image_url")
     private String imageUrl;
 
+    public Product(String name, String description, int price, String imageUrl) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 }

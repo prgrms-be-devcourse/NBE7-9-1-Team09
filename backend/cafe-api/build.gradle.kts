@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
 	java
 	id("org.springframework.boot") version "3.5.6"
@@ -33,6 +35,10 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    //테스트용 html을 위한 타임리프 의존성 추가
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    //??
+
 }
 
 tasks.withType<Test> {

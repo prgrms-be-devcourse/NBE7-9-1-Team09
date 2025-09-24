@@ -1,0 +1,36 @@
+<!--
+간단히 테스트용으로 데이터만 보여주는 html 파일 입니다.
+-->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 상세 정보</title>
+</head>
+<body>
+
+<table>
+    <thead>
+    <tr>
+        <th>주문번호</th>
+        <th>고객명</th>
+        <th>상품</th>
+        <th>총 가격</th>
+        <th>주문 상태</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.orderId()}"></td>
+        <td th:text="${order.customerEmail()}"></td>
+        <td>
+            <div th:each="item : ${order.orderItems()}" th:text="${item}"></div>
+        </td>
+        <td th:text="${order.totalPrice()} + '원'"></td>
+        <td th:text="${order.orderState()}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
