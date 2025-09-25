@@ -28,7 +28,7 @@ public class ProductController {
         ProductDto productDto = productService.getProductById(id);
         return ResponseEntity.ok(productDto);
     }
-   
+
 
     @GetMapping
     public ResponseEntity<?> getProductList() {

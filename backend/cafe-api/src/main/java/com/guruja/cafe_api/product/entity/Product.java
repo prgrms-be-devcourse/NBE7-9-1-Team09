@@ -6,14 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Builder
-@Table(name = "product")
+@Table(name = "products")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,14 +21,12 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
     private Integer price;
-  
-    private String imageUrl;
 
+    private String imageUrl;
 
 }
