@@ -39,6 +39,7 @@ public class ProductController {
     }
 
 
+    @PostMapping
     public ResponseEntity<?> addProduct(@RequestBody ProductSaveReqDto productSaveReqDto) {
         Product product = productService.create(productSaveReqDto);
         return new ResponseEntity<>(product.getId(), HttpStatus.CREATED);

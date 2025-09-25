@@ -1,10 +1,8 @@
 package com.guruja.cafe_api.product.dto;
 
-import lombok.Builder;
-import lombok.Getter;
 import com.guruja.cafe_api.product.entity.Product;
 
-@Builder
+
 public record ProductDto(
         Long id,
         String name,

@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor @Builder
 public class Order {
@@ -39,6 +40,5 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<OrderItem> items = new ArrayList<>();
     private List<OrderItem> orderItems = new ArrayList<>();
 }
