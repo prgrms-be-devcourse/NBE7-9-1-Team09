@@ -1,30 +1,34 @@
 package com.guruja.cafe_api.product.entity;
 
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
-@Getter
-@Setter
-@Table(name = "product")
-@NoArgsConstructor
 @Entity
+@Builder
+@Table(name = "product")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 상품아이디
+    private Long id;
 
-    private String name; // 상품명
+    @Column(nullable = false)
+    private String name;
 
+    @Column(nullable = false)
     @Column(columnDefinition = "TEXT")
-    private String description; // 상품 상세설명
+    private String description;
 
-    private int price; // 상품 가격
+    @Column(nullable = false)
+    private Integer price;
+  
+    private String imageUrl;
 
-    private String imageUrl; // 상품 이미지 경로
+
 }
-
