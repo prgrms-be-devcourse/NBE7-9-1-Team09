@@ -16,15 +16,9 @@ import java.util.List;
 public class OrderViewController {
     private final OrderService orderService;
 
-    //타임리프, html 용
     @GetMapping("/admin")
-    public String viewAllOrders(Model model) {
-        //dto 이름을 OderViewAllResponse 가 나을지?
-        List<AdminOrderResponse> orders = orderService.getAllOrders();
-
-        model.addAttribute("orders", orders);
-
-        return "order-view-test";
+    public List<AdminOrderResponse> getAllOrders() {
+        return orderService.getAllOrders();
     }
 
     @GetMapping("/orders")
