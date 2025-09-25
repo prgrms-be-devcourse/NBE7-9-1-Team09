@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/cafe_api_db?useSSL=false
+    url: jdbc:mysql://localhost:3306/cafe_api_db?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: password
   jpa:
@@ -9,6 +9,5 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     generate-ddl: true
     hibernate:
-      ddl-auto: update #when foreign key relationship is complicated, validate mode is recommended. update : maintain db data when restart app, so when first time we run app it should be create mode
+      ddl-auto: update 
     show_sql: true
-

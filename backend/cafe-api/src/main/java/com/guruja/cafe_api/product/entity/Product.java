@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
+@Table(name = "product")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,10 +22,13 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
-    private Long price;
+    private Integer price;
+  
+    private String imageUrl;
 
 
 }

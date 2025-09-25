@@ -1,21 +1,26 @@
 package com.guruja.cafe_api.product.service;
 
+import com.guruja.cafe_api.product.dto.ProductDto;
+import lombok.RequiredArgsConstructor;
 import com.guruja.cafe_api.product.dto.ProductListResDto;
 import com.guruja.cafe_api.product.dto.ProductSaveReqDto;
 import com.guruja.cafe_api.product.entity.Product;
 import com.guruja.cafe_api.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductDto getProductById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+        return ProductDto.from(product);
     }
 
 
