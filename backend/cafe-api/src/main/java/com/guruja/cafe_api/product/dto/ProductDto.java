@@ -6,7 +6,7 @@ public record ProductDto(
         Long id,
         String name,
         String description,
-        int price,
+        Integer price,
         String imageUrl
 ) {
     public static ProductDto from(Product product) {

@@ -13,9 +13,9 @@ public record OrderDto(
     public OrderDto(Order o) {
         this(
                 o.getId(),
-                o.getTotal_price(),
+                o.getTotalPrice(),
                 o.getState(),
-                o.getItems().stream()
+                o.getOrderItems().stream()
                         .map(OrderItemDto::new)
                         .toList()
         );

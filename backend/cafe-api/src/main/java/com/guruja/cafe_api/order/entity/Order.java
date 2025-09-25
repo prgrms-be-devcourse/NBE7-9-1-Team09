@@ -1,5 +1,4 @@
 package com.guruja.cafe_api.order.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-@Getter
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "orders")
 public class Order {
 
@@ -18,13 +17,25 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 255)
     private String email;
-    private Integer total_price;
+
+
+    @Column(name = "total_price")
+    private Integer totalPrice;
+
+    @Column
     private String state;
+
+    @Column(nullable = false)
     private LocalDateTime date;
-    private String adress;
-    private String adress_number;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(name = "address_number", nullable = false)
+    private String addressNumber;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> items = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 }
