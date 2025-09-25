@@ -27,7 +27,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <header className="container" style={{ padding: '16px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f3f4f6' }} />
+              <div style={{ fontWeight: 700 }}>Grid & Circle</div>
+            </div>
+            <nav style={{ display: 'flex', gap: 16, color: '#6b7280', fontSize: 14 }}>
+              <a>상품목록</a>
+              <a>주문조회</a>
+            </nav>
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f3f4f6' }} />
+          </div>
+        </header>
+        <main className="container" style={{ paddingBottom: 32 }}>
+          {children}
+        </main>
       </body>
     </html>
   );
