@@ -1,14 +1,27 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/cafe_api_db?useSSL=false
-    username: root
-    password: password
-  jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create #when foreign key relationship is complicated, validate mode is recommended. update : maintain db data when restart app, so when first time we run app it should be create mode
-    show_sql: true
+  application:
+    name: sbb
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+  output:
+    ansi:
+      enabled: always
+  profiles:
+    active: dev
 
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+    org.springframework.transaction.interceptor: TRACE
