@@ -22,7 +22,7 @@ public class Order {
 
     //자료형 long? int?
     @Column(name = "total_price")
-    private int totalPrice;
+    private Integer totalPrice;
 
     @Column
     private String state;
@@ -39,7 +39,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    public Order(String email, int totalPrice, String state, LocalDateTime date, String address, String addressNumber) {
+    public Order(String email, Integer totalPrice, String state, LocalDateTime date, String address, String addressNumber) {
         this.email = email;
         this.totalPrice = totalPrice;
         this.state = state;

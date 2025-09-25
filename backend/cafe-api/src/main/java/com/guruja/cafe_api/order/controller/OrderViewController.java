@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-//OrderViewController 로 변경후 주문 조회/관리자 조회 같은 파일에서 생성 제의?
 @Controller
 @RequiredArgsConstructor
-public class AdminController {
+public class OrderViewController {
     private final OrderService orderService;
 
     //타임리프, html 용

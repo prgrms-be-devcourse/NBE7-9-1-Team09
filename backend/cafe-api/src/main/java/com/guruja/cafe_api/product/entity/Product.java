@@ -22,12 +22,12 @@ public class Product {
     private String description;
 
     @Column
-    private int price;
+    private Integer price;
 
     @Column(name = "image_url")
     private String imageUrl;
 
-    public Product(String name, String description, int price, String imageUrl) {
+    public Product(String name, String description, Integer price, String imageUrl) {
         this.name = name;
         this.description = description;
         this.price = price;
