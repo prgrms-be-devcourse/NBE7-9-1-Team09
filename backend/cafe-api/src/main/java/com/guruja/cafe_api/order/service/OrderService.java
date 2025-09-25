@@ -1,4 +1,4 @@
-package com.guruja.cafe_api.order;
+package com.guruja.cafe_api.order.service;
 
 import org.springframework.stereotype.Service;
 
