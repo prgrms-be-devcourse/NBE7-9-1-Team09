@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order,Long> {
 
+    List<Order> findByEmail(String email);
+    Optional<Order> findByIdAndEmail(Long id, String email);
+    List<Order> findAllByOrderByDateDesc();
     Optional<Order> findByEmailAndDateBetween(String email, LocalDateTime start, LocalDateTime end);
 
     List<Order> findByDateBetween(LocalDateTime start, LocalDateTime end);

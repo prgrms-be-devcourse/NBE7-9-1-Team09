@@ -1,5 +1,6 @@
 package com.guruja.cafe_api.order.controller;
 
+import org.springframework.web.bind.annotation.RestController;
 import com.guruja.cafe_api.order.dto.OrderDto;
 import com.guruja.cafe_api.order.service.OrderService;
 import lombok.RequiredArgsConstructor;

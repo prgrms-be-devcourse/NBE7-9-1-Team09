@@ -1,6 +1,8 @@
 package com.guruja.cafe_api.order.service;
 
+import com.guruja.cafe_api.order.dto.AdminOrderResponse;
 import com.guruja.cafe_api.order.dto.OrderDto;
+import com.guruja.cafe_api.order.dto.OrderDto2;
 import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.entity.OrderItem;
 import com.guruja.cafe_api.order.repository.OrderRepository;
@@ -8,12 +10,16 @@ import com.guruja.cafe_api.product.dto.ProductDto;
 import com.guruja.cafe_api.product.entity.Product;
 import com.guruja.cafe_api.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Optional;
 
 @Service
@@ -23,10 +29,39 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
+    public List<AdminOrderResponse> getAllOrders() {
+        List<Order> orders = orderRepository.findAllByOrderByDateDesc();
+
+        return orders.stream()
+                .map(AdminOrderResponse::new)
+                .collect(Collectors.toList());
+    }
+    public List<Order> findByEmail(String email) {
+
+        List<Order> orders = orderRepository.findByEmail(email);
+
+        if (orders.isEmpty()) {
+            throw new RuntimeException("해당 이메일의 주문이 존재하지 않습니다.");
+        }
+        return orders;
+    }
+
+    public void deleteByIdAndEmail(Long orderId, String email) {
+
+        Order target = orderRepository.findByIdAndEmail(orderId, email)
+                .orElseThrow(() -> new RuntimeException("이 이메일의 주문이 아닙니다."));
+
+        if (!"상품준비중".equals(target.getState())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주문을 취소할 수 없습니다.");
+        }
+        orderRepository.delete(target);
+    }
+
+
     // 주문 생성 및 기존 주문에 아이템 추가
     // 14시 이전 실행: 같은 이메일 주문이 있으면 아이템 추가, 없으면 신규 주문 생성
     @Transactional
-    public OrderDto createOrder(OrderDto dto) {
+    public OrderDto createOrder(OrderDto2 dto) {
         LocalDateTime now = LocalDateTime.now();
 
         // 현재 시간이 14시 이전이면 같은 이메일 주문이 있는지 확인
@@ -41,7 +76,7 @@ public class OrderService {
                 Order existingOrder = existingOrderOpt.get();
 
                 // 기존 주문에 아이템 추가
-                for (OrderDto.OrderItemDto newItemDto : dto.getItems()) {
+                for (OrderDto2.OrderItemDto newItemDto : dto.getItems()) {
                     Product product = productRepository.findById(newItemDto.getProduct().getId())
                             .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 
@@ -145,6 +180,8 @@ public class OrderService {
                 .price(product.getPrice())
                 .imageUrl(product.getImageUrl())
                 .build();
+
+
     }
 }
 

@@ -32,6 +32,13 @@ dependencies {
 	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    //테스트용 html을 위한 타임리프 의존성 추가
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    //??
+
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
+
     runtimeOnly("com.h2database:h2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
