@@ -15,19 +15,14 @@ public class OrderItem {
     private Long id;
 
     @Column(nullable = false)
-    private Long quantity;
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "products_id", nullable = false)
     private Product product;
 
-    public OrderItem (Long quantity, Order order, Product product) {
-        this.quantity = quantity;
-        this.order = order;
-        this.product = product;
     }
-}

@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.implementation
-
 plugins {
 	java
 	id("org.springframework.boot") version "3.5.6"
@@ -38,6 +36,8 @@ dependencies {
     //테스트용 html을 위한 타임리프 의존성 추가
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     //??
+
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
 
 }
 

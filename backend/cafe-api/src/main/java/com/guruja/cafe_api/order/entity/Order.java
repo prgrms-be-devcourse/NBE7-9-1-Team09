@@ -15,12 +15,12 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(length = 255)
     private String email;
 
-    //자료형 long? int?
+
     @Column(name = "total_price")
     private Integer totalPrice;
 
@@ -38,14 +38,4 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
-
-    public Order(String email, Integer totalPrice, String state, LocalDateTime date, String address, String addressNumber) {
-        this.email = email;
-        this.totalPrice = totalPrice;
-        this.state = state;
-        this.date = date;
-        this.address = address;
-        this.addressNumber = addressNumber;
-    }
-
 }
