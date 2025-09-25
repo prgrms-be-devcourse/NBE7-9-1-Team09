@@ -1,7 +1,6 @@
 package com.guruja.cafe_api.order.service;
 
 import com.guruja.cafe_api.order.dto.AdminOrderResponse;
-import com.guruja.cafe_api.order.dto.OrderDto;
 import com.guruja.cafe_api.order.dto.OrderDto2;
 import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.entity.OrderItem;
@@ -11,16 +10,15 @@ import com.guruja.cafe_api.product.entity.Product;
 import com.guruja.cafe_api.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +59,7 @@ public class OrderService {
     // 주문 생성 및 기존 주문에 아이템 추가
     // 14시 이전 실행: 같은 이메일 주문이 있으면 아이템 추가, 없으면 신규 주문 생성
     @Transactional
-    public OrderDto createOrder(OrderDto2 dto) {
+    public OrderDto2 createOrder(OrderDto2 dto) {
         LocalDateTime now = LocalDateTime.now();
 
         // 현재 시간이 14시 이전이면 같은 이메일 주문이 있는지 확인
@@ -77,11 +75,11 @@ public class OrderService {
 
                 // 기존 주문에 아이템 추가
                 for (OrderDto2.OrderItemDto newItemDto : dto.getItems()) {
-                    Product product = productRepository.findById(newItemDto.getProduct().getId())
+                    Product product = productRepository.findById(newItemDto.getProduct().id())
                             .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 
-                    // 동일 상품이 이미 있으면 수량만 증가
-                    Optional<OrderItem> sameProductOpt = existingOrder.getItems().stream()
+                    // 동일 상품이 이미 있으면 수량만 추가
+                    Optional<OrderItem> sameProductOpt = existingOrder.getOrderItems().stream()
                             .filter(item -> item.getProduct().getId().equals(product.getId()))
                             .findFirst();
 
@@ -95,10 +93,10 @@ public class OrderService {
                                 .product(product)
                                 .quantity(newItemDto.getQuantity())
                                 .build();
-                        existingOrder.getItems().add(newItem);
+                        existingOrder.getOrderItems().add(newItem);
                     }
 
-                    // 가격 더하기
+                    // 가격 합산
                     existingOrder.setTotalPrice(
                             existingOrder.getTotalPrice() + product.getPrice() * newItemDto.getQuantity()
                     );
@@ -120,15 +118,15 @@ public class OrderService {
                 .build();
 
         int total = 0;
-        for (OrderDto.OrderItemDto itemDto : dto.getItems()) {
-            Product product = productRepository.findById(itemDto.getProduct().getId())
+        for (OrderDto2.OrderItemDto itemDto : dto.getItems()) {
+            Product product = productRepository.findById(itemDto.getProduct().id())
                     .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
             OrderItem item = OrderItem.builder()
                     .order(order)
                     .product(product)
                     .quantity(itemDto.getQuantity())
                     .build();
-            order.getItems().add(item);
+            order.getOrderItems().add(item);
             total += product.getPrice() * itemDto.getQuantity();
         }
         order.setTotalPrice(total);
@@ -136,6 +134,8 @@ public class OrderService {
         Order saved = orderRepository.save(order);
         return toDto(saved);
     }
+
+
 
     // 14시 이후 실행: 14시 이전 주문 모두 배송중 처리
     @Transactional
@@ -153,8 +153,8 @@ public class OrderService {
     }
 
     // ====== 매핑 메서드 ======
-    private OrderDto toDto(Order order) {
-        return OrderDto.builder()
+    private OrderDto2 toDto(Order order) {
+        return OrderDto2.builder()
                 .id(order.getId())
                 .email(order.getEmail())
                 .totalPrice(order.getTotalPrice())
@@ -162,27 +162,16 @@ public class OrderService {
                 .date(order.getDate())
                 .address(order.getAddress())
                 .addressNumber(order.getAddressNumber())
-                .items(order.getItems().stream()
-                        .map(oi -> OrderDto.OrderItemDto.builder()
+                .items(order.getOrderItems().stream()
+                        .map(oi -> OrderDto2.OrderItemDto.builder()
                                 .id(oi.getId())
-                                .product(toDto(oi.getProduct()))
+                                .product(ProductDto.from(oi.getProduct()))
                                 .quantity(oi.getQuantity())
                                 .build())
                         .toList())
                 .build();
     }
 
-    private ProductDto toDto(Product product) {
-        return ProductDto.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .imageUrl(product.getImageUrl())
-                .build();
-
-
-    }
 }
 
 

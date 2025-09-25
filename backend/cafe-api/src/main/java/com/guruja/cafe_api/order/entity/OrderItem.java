@@ -8,6 +8,7 @@ import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "order_items")
 @AllArgsConstructor
@@ -26,6 +27,6 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "products_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 }
