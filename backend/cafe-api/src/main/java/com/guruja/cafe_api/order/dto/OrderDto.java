@@ -1,7 +1,11 @@
 package com.guruja.cafe_api.order.dto;
 
 import com.guruja.cafe_api.order.entity.Order;
+import com.guruja.cafe_api.product.dto.ProductDto;
+import lombok.Builder;
+import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record OrderDto(

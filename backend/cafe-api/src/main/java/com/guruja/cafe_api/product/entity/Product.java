@@ -1,6 +1,7 @@
 package com.guruja.cafe_api.product.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,5 +30,4 @@ public class Product {
 
     @Column(name = "image_url")
     private String imageUrl;
-
 }

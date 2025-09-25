@@ -1,13 +1,17 @@
 package com.guruja.cafe_api.order.entity;
+
 import com.guruja.cafe_api.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name = "order_items")
+@AllArgsConstructor
+@Builder
 public class OrderItem {
 
     @Id
@@ -24,5 +28,4 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "products_id", nullable = false)
     private Product product;
-
-    }
+}

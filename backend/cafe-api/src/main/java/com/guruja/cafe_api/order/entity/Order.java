@@ -2,15 +2,17 @@ package com.guruja.cafe_api.order.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "orders")
 @Getter
 @NoArgsConstructor
-@Table(name = "orders")
+@AllArgsConstructor @Builder
 public class Order {
 
     @Id
@@ -19,7 +21,6 @@ public class Order {
 
     @Column(length = 255)
     private String email;
-
 
     @Column(name = "total_price")
     private Integer totalPrice;
@@ -37,5 +38,7 @@ public class Order {
     private String addressNumber;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<OrderItem> items = new ArrayList<>();
     private List<OrderItem> orderItems = new ArrayList<>();
 }
