@@ -53,6 +53,7 @@ public class OrderService {
         return orders;
     }
 
+    @Transactional
     public void deleteByIdAndEmail(Long orderId, String email) {
 
         Order target = orderRepository.findByIdAndEmail(orderId, email)
@@ -61,6 +62,7 @@ public class OrderService {
         if (!"상품준비중".equals(target.getState())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주문을 취소할 수 없습니다.");
         }
+
         orderRepository.delete(target);
     }
 
