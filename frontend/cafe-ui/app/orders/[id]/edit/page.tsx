@@ -68,8 +68,8 @@ const EditOrderPage = () => {
         items: itemsToUpdate
       });
     },
-    onSuccess: () => {
-      router.replace('/orders/search')
+    onSuccess: (email) => {
+      router.replace(`/orders/result/${email}`)
     }
   });
 
