@@ -2,22 +2,30 @@ package com.guruja.cafe_api.order.service;
 
 import com.guruja.cafe_api.order.dto.AdminOrderResponse;
 import com.guruja.cafe_api.order.dto.OrderDto2;
+import com.guruja.cafe_api.order.dto.OrderEditReqDto;
+import com.guruja.cafe_api.order.dto.OrderItemEditReqDto;
 import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.entity.OrderItem;
+import com.guruja.cafe_api.order.repository.OrderItemRepository;
 import com.guruja.cafe_api.order.repository.OrderRepository;
 import com.guruja.cafe_api.product.dto.ProductDto;
 import com.guruja.cafe_api.product.entity.Product;
 import com.guruja.cafe_api.product.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.naming.TimeLimitExceededException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +34,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final OrderItemRepository orderItemRepository;
 
     public List<AdminOrderResponse> getAllOrders() {
         List<Order> orders = orderRepository.findAllByOrderByDateDesc();
@@ -172,6 +181,32 @@ public class OrderService {
                 .build();
     }
 
+    public void editOrder(Long orderId, OrderEditReqDto orderEditReqDto) {
+        Order order = orderRepository.findById(orderId).orElseThrow(()-> new EntityNotFoundException("없는 주문입니다."));
+
+        //we will show client edit button which is yesterday 14:00:01 to today 13:59:59
+        //but if client click the button and enter the page and edit after 14:00:00 we should send error
+        //every 14 we will redirect user in editPage to errorPage or homepage
+
+        //bring current orderItem by its id
+        //edit its quantity
+        //if quantity is zero(client will send zero quantity item, even if user delete the item)
+        //we will delete order item(we will prevent user from deleting all item in editing page in client, since we have deleting button)
+        //focus on what we are editing right now and focus on its id
+
+
+        for(OrderItemEditReqDto orderItemEditReqDto: orderEditReqDto.items()){
+            OrderItem orderItem = orderItemRepository.findById(orderItemEditReqDto.orderItemId()).orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
+
+            if(orderItemEditReqDto.quantity() == 0) {
+                orderItemRepository.delete(orderItem);
+                continue;
+            }
+
+            orderItem.setQuantity(orderItemEditReqDto.quantity());
+            orderItemRepository.save(orderItem);
+        }
+    }
 }
 
 
