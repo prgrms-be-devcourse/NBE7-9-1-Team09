@@ -22,13 +22,13 @@ export default function Header() {
           {/* 메뉴 */}
           {/* 현재는 리다이렉션이 걸려있지 않습니다 */}
           <div className="flex items-center space-x-4">
-            <Link href="#" className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors">
+            <Link href="/products" className="px-3 py-1.5 rounded-md text-sm font-medium hover:text-gray-500 transition-colors">
               상품목록
             </Link>
-            <Link href="#" className="text-sm font-medium hover:text-stone-800 transition-colors">
+            <Link href="/orders/search" className="px-3 py-1.5 rounded-md text-sm font-medium hover:text-gray-500 transition-colors">
               주문조회
             </Link>
-            <Link href="#" className="hover:text-gray-500 transition-colors">
+            <Link href="/cart" className="hover:text-gray-500 transition-colors">
               <FiShoppingCart size={24} />
             </Link>
           </div>
