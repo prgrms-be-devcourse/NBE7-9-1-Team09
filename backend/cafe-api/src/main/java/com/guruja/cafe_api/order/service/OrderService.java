@@ -63,7 +63,7 @@ public class OrderService {
         LocalDateTime now = LocalDateTime.now();
 
         // 현재 시간이 14시 이전이면 같은 이메일 주문이 있는지 확인
-        if (now.getHour() < 14) {
+        if (now.getHour() < 14 ) {
             Optional<Order> existingOrderOpt = orderRepository.findByEmailAndDateBetween(
                     dto.getEmail(),
                     now.toLocalDate().atStartOfDay(),

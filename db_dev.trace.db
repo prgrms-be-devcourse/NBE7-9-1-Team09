@@ -1,0 +1,4 @@
+2025-09-25 16:32:11.831411+09:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "select * from order_items\000d\000ajoin [*]on products"; expected "identifier"; SQL statement:
+select * from order_items
+join on products [42001-232]

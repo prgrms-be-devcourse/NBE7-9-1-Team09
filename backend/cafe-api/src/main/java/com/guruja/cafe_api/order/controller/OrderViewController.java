@@ -23,6 +23,7 @@ public class OrderViewController {
         List<AdminOrderResponse> orders = orderService.getAllOrders();
 
         model.addAttribute("orders", orders);
+        System.out.println(orders);
 
         return "order-view-test";
     }

@@ -24,7 +24,7 @@ public class OrderDto2 {
     public static class OrderItemDto {
         private Long id;
         private ProductDto product;
-        private int quantity;
+        private Integer quantity;
 
         public void setQuantity(int quantity) {
             this.quantity = quantity;
