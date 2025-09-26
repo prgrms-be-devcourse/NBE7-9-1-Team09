@@ -39,10 +39,25 @@ const products = [
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
   // 상품 ID로 데이터 찾기
   const productId = params.id;
-  const product = products.find(p => p.id === productId) || products[0];
+  const product = products.find(p => p.id === productId);
 
   if (!product) {
-    return <div className="p-10 text-center text-red-500 font-bold">상품을 찾을 수 없습니다.</div>;
+    return (<div className="flex flex-col justify-center items-center w-full min-h-screen bg-white p-10">
+
+      {/* 출력 이미지 */}
+      <Image
+        src="/images/empty.png" 
+        alt="상품 없음"
+        width={350} 
+        height={350}
+        className="mb-30"
+      />
+
+      {/* 출력 메세지 */}
+      <h1 className="text-5xl font-extrabold">
+        존재하지 않는 상품입니다.
+      </h1>
+    </div>);
   }
 
   // description 줄바꿈 기준

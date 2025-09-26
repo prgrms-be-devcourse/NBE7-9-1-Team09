@@ -23,7 +23,7 @@ export default function ProductInteraction({ product }: { product: Product }) {
   const handleAddToCart = () => {
     console.log(`${product.name} ${quantity}개를 장바구니에 담았습니다. 총 가격: ${totalPrice}원`);
     alert(`장바구니에 상품을 담았습니다.`);
-    setQuantity(1);
+    setQuantity(1); // 장바구니 담을 시 수량 초기화
   };
 
   // 구매하기  페이지 이동
