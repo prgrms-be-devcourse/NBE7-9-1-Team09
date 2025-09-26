@@ -4,6 +4,7 @@ import com.guruja.cafe_api.order.dto.AdminOrderResponse;
 import com.guruja.cafe_api.order.dto.OrderDto2;
 import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.entity.OrderItem;
+import com.guruja.cafe_api.order.repository.OrderItemRepository;
 import com.guruja.cafe_api.order.repository.OrderRepository;
 import com.guruja.cafe_api.product.dto.ProductDto;
 import com.guruja.cafe_api.product.entity.Product;
@@ -26,6 +27,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final OrderItemRepository orderItemRepository;
 
     public List<AdminOrderResponse> getAllOrders() {
         List<Order> orders = orderRepository.findAllByOrderByDateDesc();
@@ -44,6 +46,7 @@ public class OrderService {
         return orders;
     }
 
+    @Transactional
     public void deleteByIdAndEmail(Long orderId, String email) {
 
         Order target = orderRepository.findByIdAndEmail(orderId, email)
@@ -52,6 +55,7 @@ public class OrderService {
         if (!"상품준비중".equals(target.getState())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주문을 취소할 수 없습니다.");
         }
+
         orderRepository.delete(target);
     }
 
