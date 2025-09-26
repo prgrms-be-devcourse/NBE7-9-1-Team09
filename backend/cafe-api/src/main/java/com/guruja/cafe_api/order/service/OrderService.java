@@ -1,9 +1,6 @@
 package com.guruja.cafe_api.order.service;
 
-import com.guruja.cafe_api.order.dto.AdminOrderRes;
-import com.guruja.cafe_api.order.dto.OrderCreateReq;
-import com.guruja.cafe_api.order.dto.OrderEditReq;
-import com.guruja.cafe_api.order.dto.OrderItemEditReq;
+import com.guruja.cafe_api.order.dto.*;
 import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.entity.OrderItem;
 import com.guruja.cafe_api.order.repository.OrderItemRepository;
@@ -20,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -205,6 +203,25 @@ public class OrderService {
             orderItem.setQuantity(orderItemEditReq.quantity());
             orderItemRepository.save(orderItem);
         }
+    }
+
+    public OrderEditInfoRes editOrderInfo(Long orderId) {
+        List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
+
+        OrderEditInfoRes orderEditInfoRes = new OrderEditInfoRes(new ArrayList<>());
+
+        for(OrderItem item : items) {
+            OrderItemEditInfoRes orderItemEditInfoRes = new OrderItemEditInfoRes(
+                    item.getId(),
+                    item.getQuantity(),
+                    item.getProduct().getName(),
+                    item.getProduct().getPrice(),
+                    item.getProduct().getImageUrl()
+            );
+            orderEditInfoRes.items().add(orderItemEditInfoRes);
+        }
+
+        return orderEditInfoRes;
     }
 }
 

@@ -1,8 +1,10 @@
 package com.guruja.cafe_api.order.controller;
 
 import com.guruja.cafe_api.order.dto.AdminOrderRes;
+import com.guruja.cafe_api.order.dto.OrderEditInfoRes;
 import com.guruja.cafe_api.order.dto.OrderListRes;
 import com.guruja.cafe_api.order.dto.OrderEditReq;
+import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,14 @@ public class OrderViewController {
         //이메일과 주문아이디를 사용해서 주문 삭제
         orderService.deleteByIdAndEmail(orderId, email);
     }
+
+    @GetMapping("/orders/{orderId}")
+    public OrderEditInfoRes editOrderInfo(@PathVariable Long orderId){
+        OrderEditInfoRes orderEditInfoRes = orderService.editOrderInfo(orderId);
+
+        return orderEditInfoRes;
+    }
+
 
     @PutMapping("/orders/{orderId}")
     public void editOrder(@PathVariable Long orderId, @RequestBody OrderEditReq orderEditReqDto) {
