@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class OrderCreateReq {
+public class    OrderCreateReq {
     private Long id;
     private String email;
     private int totalPrice;

@@ -1,6 +1,5 @@
 package com.guruja.cafe_api.product.service;
 
-import com.guruja.cafe_api.product.dto.ProductListResDto;
 import com.guruja.cafe_api.product.dto.ProductListRes;
 import lombok.RequiredArgsConstructor;
 import com.guruja.cafe_api.product.dto.ProductCreateReq;
