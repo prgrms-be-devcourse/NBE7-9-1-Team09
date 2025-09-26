@@ -17,16 +17,13 @@ export default function AdminPage() {
     const [orders, setOrders] = useState<AdminOrderResponse[]>([]);
 
     useEffect(() => {
-        axios.get<AdminOrderResponse[]>("/api/admin")
+        axios.get<AdminOrderResponse[]>("http://localhost:8080/admin")
             .then(res => setOrders(res.data))
             .catch(err => console.error(err));
     }, []);
 
     return (
-        <div className="max-w-4xl mx-auto my-10 p-5">
-
-            {/* 헤더 자리 */}
-
+        <div>
             <div className="grid grid-cols-[1fr_2fr_3fr_1.5fr_1.5fr] gap-3 py-2 px-4 mb-5 font-bold text-gray-900 text-sm">
                 <span className="text-left">주문번호</span>
                 <span className="text-left">고객명</span>
@@ -60,9 +57,8 @@ export default function AdminPage() {
                         </span>
 
                         <div className="flex justify-center">
-                            <span className={`font-bold text-sm ${
-                                order.orderState === '처리중' ? 'text-[#6DA382]' : 'text-gray-900'
-                            }`}>
+                            <span className={`font-bold text-sm ${order.orderState === '처리중' ? 'text-[#6DA382]' : 'text-gray-900'
+                                }`}>
                                 {order.orderState}
                             </span>
                         </div>
