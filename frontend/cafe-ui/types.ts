@@ -24,5 +24,6 @@ export type OrderItemEditReq = {
 };
 
 export type OrderEditReq = {
+  orderTotalPrice: number;
   items: OrderItemEditReq[];
 };

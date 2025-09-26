@@ -62,8 +62,11 @@ const EditOrderPage = () => {
         orderItemId: item.orderItemId,
         quantity: item.orderItemQuantity
       }));
-      // Pass the data in the correct { items: [...] } format
-      return updateOrder(orderId, { items: itemsToUpdate });
+      // Pass the data in the correct format, now including totalPrice
+      return updateOrder(orderId, {
+        orderTotalPrice: totalPrice,
+        items: itemsToUpdate
+      });
     },
     onSuccess: () => {
       router.replace('/orders/search')
