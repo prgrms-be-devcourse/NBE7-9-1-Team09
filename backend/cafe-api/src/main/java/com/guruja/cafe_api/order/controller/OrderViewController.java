@@ -2,6 +2,8 @@ package com.guruja.cafe_api.order.controller;
 
 import com.guruja.cafe_api.order.dto.AdminOrderResponse;
 import com.guruja.cafe_api.order.dto.OrderDto;
+import com.guruja.cafe_api.order.dto.OrderEditReqDto;
+import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +18,9 @@ import java.util.List;
 public class OrderViewController {
     private final OrderService orderService;
 
-    //타임리프, html 용
     @GetMapping("/admin")
-    public String viewAllOrders(Model model) {
-        //dto 이름을 OderViewAllResponse 가 나을지?
-        List<AdminOrderResponse> orders = orderService.getAllOrders();
-
-        model.addAttribute("orders", orders);
-        System.out.println(orders);
-
-        return "order-view-test";
+    public List<AdminOrderResponse> getAllOrders() {
+        return orderService.getAllOrders();
     }
 
     @GetMapping("/orders")
@@ -53,5 +48,10 @@ public class OrderViewController {
                 .stream()
                 .map(OrderDto::new)
                 .toList();
+    }
+
+    @PutMapping("/orders/{orderId}")
+    public void editOrder(@PathVariable Long orderId, @RequestBody OrderEditReqDto orderEditReqDto) {
+        orderService.editOrder(orderId, orderEditReqDto);
     }
 }

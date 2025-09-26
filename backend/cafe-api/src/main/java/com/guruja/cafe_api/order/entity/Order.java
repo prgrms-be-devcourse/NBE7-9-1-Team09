@@ -12,8 +12,9 @@ import java.util.List;
 @Table(name = "orders")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
-@AllArgsConstructor @Builder
+@AllArgsConstructor
 public class Order {
 
     @Id
