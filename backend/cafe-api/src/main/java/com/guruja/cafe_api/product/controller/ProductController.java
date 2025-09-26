@@ -1,19 +1,14 @@
 package com.guruja.cafe_api.product.controller;
 
-import com.guruja.cafe_api.product.dto.ProductListResDto;
-import com.guruja.cafe_api.product.dto.ProductSaveReqDto;
+import com.guruja.cafe_api.product.dto.ProductListRes;
+import com.guruja.cafe_api.product.dto.ProductCreateReq;
 import com.guruja.cafe_api.product.entity.Product;
-import com.guruja.cafe_api.product.service.ProductService;
-import lombok.RequiredArgsConstructor;
-import com.guruja.cafe_api.product.dto.ProductDto;
 import com.guruja.cafe_api.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.guruja.cafe_api.product.dto.ProductSaveReqDto;
-import com.guruja.cafe_api.product.entity.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,15 +40,15 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<?> getProductList() {
-        List<ProductDto> productListResDtos = productService.getProductList();
+        List<ProductListRes> productListResDtos = productService.getProductList();
 
         return new ResponseEntity<>(productListResDtos, HttpStatus.OK);
     }
 
 
     @PostMapping
-    public ResponseEntity<?> addProduct(@RequestBody ProductSaveReqDto productSaveReqDto) {
-        Product product = productService.create(productSaveReqDto);
+    public ResponseEntity<?> addProduct(@RequestBody ProductCreateReq productCreateReq) {
+        Product product = productService.create(productCreateReq);
         return new ResponseEntity<>(product.getId(), HttpStatus.CREATED);
 
     }

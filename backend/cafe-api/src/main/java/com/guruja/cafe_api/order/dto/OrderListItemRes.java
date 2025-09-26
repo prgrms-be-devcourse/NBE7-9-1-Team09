@@ -2,11 +2,11 @@ package com.guruja.cafe_api.order.dto;
 
 import com.guruja.cafe_api.order.entity.OrderItem;
 
-public record OrderItemDto(
+public record OrderListItemRes(
         String productName,
         Integer quantity
 ) {
-    public OrderItemDto(OrderItem oi) {
+    public OrderListItemRes(OrderItem oi) {
         this(oi.getProduct().getName(), oi.getQuantity());
     }
 }

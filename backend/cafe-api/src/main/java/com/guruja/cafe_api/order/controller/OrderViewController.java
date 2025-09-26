@@ -1,8 +1,9 @@
 package com.guruja.cafe_api.order.controller;
 
-import com.guruja.cafe_api.order.dto.AdminOrderResponse;
-import com.guruja.cafe_api.order.dto.OrderDto;
-import com.guruja.cafe_api.order.dto.OrderEditReqDto;
+import com.guruja.cafe_api.order.dto.AdminOrderRes;
+import com.guruja.cafe_api.order.dto.OrderEditInfoRes;
+import com.guruja.cafe_api.order.dto.OrderListRes;
+import com.guruja.cafe_api.order.dto.OrderEditReq;
 import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,18 +19,18 @@ public class OrderViewController {
     private final OrderService orderService;
 
     @GetMapping("/admin")
-    public List<AdminOrderResponse> getAllOrders() {
+    public List<AdminOrderRes> getAllOrders() {
         return orderService.getAllOrders();
     }
 
     @GetMapping("/orders/result/{email}")
     @Operation(summary = "주문조회-이메일 입력 후")
-    public List<OrderDto> getOrdersByEmail(
+    public List<OrderListRes> getOrdersByEmail(
             @PathVariable String email
     ) {
         return orderService.findByEmail(email)
                 .stream()
-                .map(OrderDto::new)
+                .map(OrderListRes::new)
                 .toList();
     }
 
@@ -43,8 +44,16 @@ public class OrderViewController {
         orderService.deleteByIdAndEmail(orderId, email);
     }
 
+    @GetMapping("/orders/{orderId}")
+    public OrderEditInfoRes editOrderInfo(@PathVariable Long orderId){
+        OrderEditInfoRes orderEditInfoRes = orderService.editOrderInfo(orderId);
+
+        return orderEditInfoRes;
+    }
+
+
     @PutMapping("/orders/{orderId}")
-    public void editOrder(@PathVariable Long orderId, @RequestBody OrderEditReqDto orderEditReqDto) {
+    public void editOrder(@PathVariable Long orderId, @RequestBody OrderEditReq orderEditReqDto) {
         orderService.editOrder(orderId, orderEditReqDto);
     }
 }

@@ -1,6 +1,6 @@
 package com.guruja.cafe_api.product.dto;
 
-public record ProductSaveReqDto(
+public record ProductCreateReq(
         String name,
         String description,
         Integer price,

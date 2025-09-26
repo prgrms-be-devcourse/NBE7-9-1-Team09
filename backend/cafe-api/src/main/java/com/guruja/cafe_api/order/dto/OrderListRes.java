@@ -1,26 +1,22 @@
 package com.guruja.cafe_api.order.dto;
 
 import com.guruja.cafe_api.order.entity.Order;
-import com.guruja.cafe_api.product.dto.ProductDto;
-import lombok.Builder;
-import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-public record OrderDto(
+public record OrderListRes(
         Long orderId,
         Integer totalPrice,
         String state,
-        List<OrderItemDto> orderItems
+        List<OrderListItemRes> orderItems
 ) {
-    public OrderDto(Order o) {
+    public OrderListRes(Order o) {
         this(
                 o.getId(),
                 o.getTotalPrice(),
                 o.getState(),
                 o.getOrderItems().stream()
-                        .map(OrderItemDto::new)
+                        .map(OrderListItemRes::new)
                         .toList()
         );
     }
