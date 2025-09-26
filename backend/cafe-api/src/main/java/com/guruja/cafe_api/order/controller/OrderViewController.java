@@ -56,8 +56,8 @@ public class OrderViewController {
 
     @PutMapping("/orders/{orderId}")
     public ResponseEntity<?> editOrder(@PathVariable Long orderId, @RequestBody OrderEditReq orderEditReqDto) {
-        String orderEmail = orderService.editOrder(orderId, orderEditReqDto);
+        orderService.editOrder(orderId, orderEditReqDto);
 
-        return new ResponseEntity<>(orderEmail, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

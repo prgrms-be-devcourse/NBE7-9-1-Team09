@@ -18,5 +18,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     List<Order> findByEmailAndState(String email, String state);
 
     List<Order> findByDateBetween(LocalDateTime start, LocalDateTime end);
+
+    String findEmailById(Long id);
 }
 
