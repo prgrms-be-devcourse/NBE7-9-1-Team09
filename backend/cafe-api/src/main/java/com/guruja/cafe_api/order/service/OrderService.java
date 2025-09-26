@@ -177,7 +177,7 @@ public class OrderService {
                 .build();
     }
 
-    public void editOrder(Long orderId, OrderEditReq orderEditReqDto) {
+    public String editOrder(Long orderId, OrderEditReq orderEditReqDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(()-> new EntityNotFoundException("없는 주문입니다."));
 
         //we will show client edit button which is yesterday 14:00:01 to today 13:59:59
@@ -204,6 +204,9 @@ public class OrderService {
             orderItem.setQuantity(orderItemEditReq.quantity());
             orderItemRepository.save(orderItem);
         }
+
+
+        return order.getEmail();
     }
 
     public OrderEditInfoRes editOrderInfo(Long orderId) {
