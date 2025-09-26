@@ -1,6 +1,6 @@
 package com.guruja.cafe_api.order.dto;
 
-import com.guruja.cafe_api.product.dto.ProductDto;
+import com.guruja.cafe_api.product.dto.ProductListRes;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class OrderDto2 {
+public class OrderCreateReq {
     private Long id;
     private String email;
     private int totalPrice;
@@ -23,7 +23,7 @@ public class OrderDto2 {
     @Builder
     public static class OrderItemDto {
         private Long id;
-        private ProductDto product;
+        private ProductListRes product;
         private int quantity;
 
         public void setQuantity(int quantity) {
