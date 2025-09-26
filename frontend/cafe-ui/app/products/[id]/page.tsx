@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import ProductInteraction from './components/ProductInteraction';
 
-// 임의 커피원두 데이터
+/* // 임의 커피원두 데이터
 const products = [
   {
     id: '1',
@@ -31,24 +31,39 @@ const products = [
     price: 4000,
     imageUrl: '/images/coffee4.png',
   },
-];
+]; */
 
+
+async function getProduct(id: string) {
+  const res = await fetch(`http://localhost:3000/api/products/${id}`, {
+  });
+
+  // 404 응답 코드 처리
+  if (res.status === 404) {
+    return null;
+  }
+
+  if (!res.ok) {
+    throw new Error('상품 정보를 가져오는 데 실패했습니다.');
+  }
+
+  return res.json();
+}
 
 
 // 서버 컴포넌트: page.tsx
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  // 상품 ID로 데이터 찾기
+export default async function ProductDetailPage({ params }: { params: { id: string } }) {
   const productId = params.id;
-  const product = products.find(p => p.id === productId);
+  const product = await getProduct(productId);
 
   if (!product) {
     return (<div className="flex flex-col justify-center items-center w-full min-h-screen bg-white p-10">
 
       {/* 출력 이미지 */}
       <Image
-        src="/images/empty.png" 
+        src="/images/empty.png"
         alt="상품 없음"
-        width={350} 
+        width={350}
         height={350}
         className="mb-30"
       />
@@ -61,8 +76,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   }
 
   // description 줄바꿈 기준
-  const descriptionLines = product.description.split('. ').filter(line => line.trim() !== '');
-
+  const descriptionLines = product.description.split('. ').filter((line: string) => line.trim() !== '');
   return (
     <div className="flex justify-center w-full min-h-screen bg-white">
 
@@ -89,7 +103,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           {/* 상세 설명 */}
           <div className="space-y-4 text-gray-600">
             <p className="text-2xl font-semibold mb-4 text-gray-800">상세 설명</p>
-            {descriptionLines.map((line, index) => (
+            {descriptionLines.map((line: string, index: number) => (
               <p key={index} className="text-lg leading-relaxed text-gray-700 max-w-2xl">
                 {line.trim()}{index < descriptionLines.length - 1 ? '.' : ''}
               </p>
