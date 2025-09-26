@@ -6,6 +6,10 @@ import com.guruja.cafe_api.order.dto.OrderEditReq;
 import com.guruja.cafe_api.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +20,14 @@ import java.util.List;
 public class OrderViewController {
     private final OrderService orderService;
 
+//    @GetMapping("/admin")
+//    public List<AdminOrderRes> getAllOrders() {
+//        return orderService.getAllOrders();
+//    }
+
     @GetMapping("/admin")
-    public List<AdminOrderRes> getAllOrders() {
-        return orderService.getAllOrders();
+    public Page<AdminOrderRes> getAllOrders(@PageableDefault(sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
+        return orderService.getAllOrders(pageable);
     }
 
     @GetMapping("/orders/result/{email}")
