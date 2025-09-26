@@ -1,26 +1,33 @@
-import type { Product } from "@/types";
+import type { ProductListRes } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 
 const ProductCard = ({
   product
 }: {
-  product: Product
+  product: ProductListRes
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow hover:shadow-lg transition p-4 flex flex-col items-center">
-      <Link href={`/products/${product.id}`} className="w-full flex flex-col items-center">
-        <div className="w-full h-48 relative mb-4">
-          <Image
-            src={product.image_url}
-            alt={product.name}
-            fill
-            className="object-cover rounded-md"
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
+    <div className="bg-stone-300 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+      <Link href={`/products/${product.id}`} className="block">
+        {/* Image Container with White Background */}
+        <div className="bg-white rounded-xl p-6 mb-4 shadow-sm">
+          <div className="w-full h-48 relative">
+            <Image
+              src={product.imageUrl || '/placeholder-coffee.png'}
+              alt={product.name}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          </div>
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2 text-center">{product.name}</h3>
-        <p className="text-md text-gray-600 font-medium mb-2">{product.price.toLocaleString()}원</p>
+        
+        {/* Product Info */}
+        <div className="text-center">
+          <h3 className="text-lg font-semibold text-gray-800 mb-1">{product.name}</h3>
+          <p className="text-lg font-bold text-gray-800">{product.price.toLocaleString()}원</p>
+        </div>
       </Link>
     </div>
   );
