@@ -4,15 +4,15 @@ import com.guruja.cafe_api.product.entity.Product;
 import lombok.Builder;
 
 @Builder
-public record ProductDto(
+public record ProductListRes(
         Long id,
         String name,
         String description,
         Integer price,
         String imageUrl
 ) {
-    public static ProductDto from(Product product) {
-        return new ProductDto(
+    public static ProductListRes from(Product product) {
+        return new ProductListRes(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),

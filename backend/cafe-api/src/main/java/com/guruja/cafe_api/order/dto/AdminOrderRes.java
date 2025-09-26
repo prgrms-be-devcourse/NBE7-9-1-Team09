@@ -5,7 +5,7 @@ import com.guruja.cafe_api.order.entity.Order;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record AdminOrderResponse(
+public record AdminOrderRes(
         //주문 날짜 추가?
         Long orderId,
         String customerEmail,
@@ -14,7 +14,7 @@ public record AdminOrderResponse(
         String orderState
 ) {
 
-    public AdminOrderResponse(Order order) {
+    public AdminOrderRes(Order order) {
         this(
                 order.getId(),
                 order.getEmail(),

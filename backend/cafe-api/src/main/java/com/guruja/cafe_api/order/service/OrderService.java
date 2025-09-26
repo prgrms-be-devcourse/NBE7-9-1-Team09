@@ -1,14 +1,14 @@
 package com.guruja.cafe_api.order.service;
 
-import com.guruja.cafe_api.order.dto.AdminOrderResponse;
-import com.guruja.cafe_api.order.dto.OrderDto2;
-import com.guruja.cafe_api.order.dto.OrderEditReqDto;
-import com.guruja.cafe_api.order.dto.OrderItemEditReqDto;
+import com.guruja.cafe_api.order.dto.AdminOrderRes;
+import com.guruja.cafe_api.order.dto.OrderCreateReq;
+import com.guruja.cafe_api.order.dto.OrderEditReq;
+import com.guruja.cafe_api.order.dto.OrderItemEditReq;
 import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.entity.OrderItem;
 import com.guruja.cafe_api.order.repository.OrderItemRepository;
 import com.guruja.cafe_api.order.repository.OrderRepository;
-import com.guruja.cafe_api.product.dto.ProductDto;
+import com.guruja.cafe_api.product.dto.ProductListRes;
 import com.guruja.cafe_api.product.entity.Product;
 import com.guruja.cafe_api.product.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,14 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.naming.TimeLimitExceededException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,12 +32,12 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final OrderItemRepository orderItemRepository;
 
-    public List<AdminOrderResponse> getAllOrders() {
+    public List<AdminOrderRes> getAllOrders() {
         List<Order> orders = orderRepository.findAllByOrderByDateDesc();
 
 
         return orders.stream()
-                .map(AdminOrderResponse::new)
+                .map(AdminOrderRes::new)
                 .collect(Collectors.toList());
     }
     public List<Order> findByEmail(String email) {
@@ -54,6 +50,7 @@ public class OrderService {
         return orders;
     }
 
+    @Transactional
     public void deleteByIdAndEmail(Long orderId, String email) {
 
         Order target = orderRepository.findByIdAndEmail(orderId, email)
@@ -62,6 +59,7 @@ public class OrderService {
         if (!"상품준비중".equals(target.getState())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "주문을 취소할 수 없습니다.");
         }
+
         orderRepository.delete(target);
     }
 
@@ -69,7 +67,7 @@ public class OrderService {
     // 주문 생성 및 기존 주문에 아이템 추가
     // 14시 이전 실행: 같은 이메일 주문이 있으면 아이템 추가, 없으면 신규 주문 생성
     @Transactional
-    public OrderDto2 createOrder(OrderDto2 dto) {
+    public OrderCreateReq createOrder(OrderCreateReq dto) {
         LocalDateTime now = LocalDateTime.now();
 
         // 현재 시간이 14시 이전이면 같은 이메일 주문이 있는지 확인
@@ -84,7 +82,7 @@ public class OrderService {
                 Order existingOrder = existingOrderOpt.get();
 
                 // 기존 주문에 아이템 추가
-                for (OrderDto2.OrderItemDto newItemDto : dto.getItems()) {
+                for (OrderCreateReq.OrderItemDto newItemDto : dto.getItems()) {
                     Product product = productRepository.findById(newItemDto.getProduct().id())
                             .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 
@@ -128,7 +126,7 @@ public class OrderService {
                 .build();
 
         int total = 0;
-        for (OrderDto2.OrderItemDto itemDto : dto.getItems()) {
+        for (OrderCreateReq.OrderItemDto itemDto : dto.getItems()) {
             Product product = productRepository.findById(itemDto.getProduct().id())
                     .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
             OrderItem item = OrderItem.builder()
@@ -163,8 +161,8 @@ public class OrderService {
     }
 
     // ====== 매핑 메서드 ======
-    private OrderDto2 toDto(Order order) {
-        return OrderDto2.builder()
+    private OrderCreateReq toDto(Order order) {
+        return OrderCreateReq.builder()
                 .id(order.getId())
                 .email(order.getEmail())
                 .totalPrice(order.getTotalPrice())
@@ -173,16 +171,16 @@ public class OrderService {
                 .address(order.getAddress())
                 .addressNumber(order.getAddressNumber())
                 .items(order.getOrderItems().stream()
-                        .map(oi -> OrderDto2.OrderItemDto.builder()
+                        .map(oi -> OrderCreateReq.OrderItemDto.builder()
                                 .id(oi.getId())
-                                .product(ProductDto.from(oi.getProduct()))
+                                .product(ProductListRes.from(oi.getProduct()))
                                 .quantity(oi.getQuantity())
                                 .build())
                         .toList())
                 .build();
     }
 
-    public void editOrder(Long orderId, OrderEditReqDto orderEditReqDto) {
+    public void editOrder(Long orderId, OrderEditReq orderEditReqDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(()-> new EntityNotFoundException("없는 주문입니다."));
 
         //we will show client edit button which is yesterday 14:00:01 to today 13:59:59
@@ -196,15 +194,15 @@ public class OrderService {
         //focus on what we are editing right now and focus on its id
 
 
-        for(OrderItemEditReqDto orderItemEditReqDto: orderEditReqDto.items()){
-            OrderItem orderItem = orderItemRepository.findById(orderItemEditReqDto.orderItemId()).orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
+        for(OrderItemEditReq orderItemEditReq : orderEditReqDto.items()){
+            OrderItem orderItem = orderItemRepository.findById(orderItemEditReq.orderItemId()).orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
 
-            if(orderItemEditReqDto.quantity() == 0) {
+            if(orderItemEditReq.quantity() == 0) {
                 orderItemRepository.delete(orderItem);
                 continue;
             }
 
-            orderItem.setQuantity(orderItemEditReqDto.quantity());
+            orderItem.setQuantity(orderItemEditReq.quantity());
             orderItemRepository.save(orderItem);
         }
     }
