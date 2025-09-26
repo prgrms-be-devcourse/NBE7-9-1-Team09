@@ -15,6 +15,7 @@ export type OrderItemEditInfoRes = {
 };
 
 export type OrderEditInfoRes = {
+  orderEmail: string;
   items: OrderItemEditInfoRes[];
 };
 

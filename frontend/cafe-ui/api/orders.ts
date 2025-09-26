@@ -6,7 +6,7 @@ export const fetchOrderEditInfo = async (orderId: number): Promise<OrderEditInfo
   return res.data;
 }
 
-export const updateOrder = async (orderId: number, data: OrderEditReq): Promise<string> => {
-  const res = await api.put<string>(`/orders/${orderId}`, data);
+export const updateOrder = async (orderId: number, data: OrderEditReq): Promise<void> => {
+  const res = await api.put<void>(`/orders/${orderId}`, data);
   return res.data;
 }

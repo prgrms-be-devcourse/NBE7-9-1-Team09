@@ -23,6 +23,17 @@ const EditOrderPage = () => {
   const [orderItems, setOrderItems] = useState<OrderItemEditInfoRes[]>([]);
 
   useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      if (now.getHours() === 14 && now.getMinutes() === 0 && now.getSeconds() === 0) {
+        router.replace(`/orders/result/${initialOrder?.orderEmail}`);
+      }
+    }, 999); 
+
+    return () => clearInterval(intervalId);
+  }, [router, initialOrder]);
+
+  useEffect(() => {
     if (initialOrder) {
       // The response has an 'items' property
       setOrderItems(initialOrder.items);
@@ -68,8 +79,8 @@ const EditOrderPage = () => {
         items: itemsToUpdate
       });
     },
-    onSuccess: (email) => {
-      router.replace(`/orders/result/${email}`)
+    onSuccess: () => {
+      router.replace(`/orders/result/${initialOrder?.orderEmail}`)
     }
   });
 
