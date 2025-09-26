@@ -12,16 +12,17 @@ const productsQueryOptions = queryOptions({
 const ProductListPage = () => {
   const { data: products } = useSuspenseQuery(productsQueryOptions);
   
-  return (<div>
-
-    <div className="px-4 py-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products?.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {products?.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </div>
     </div>
-  </div> );
+  );
 }
  
 export default ProductListPage;
