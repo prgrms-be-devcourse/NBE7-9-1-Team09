@@ -15,6 +15,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     Optional<Order> findByIdAndEmail(Long id, String email);
     List<Order> findAllByOrderByDateDesc();
     Optional<Order> findByEmailAndDateBetween(String email, LocalDateTime start, LocalDateTime end);
+    List<Order> findByEmailAndState(String email, String state);
 
     List<Order> findByDateBetween(LocalDateTime start, LocalDateTime end);
 }

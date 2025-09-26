@@ -28,7 +28,7 @@ export default function Header() {
             <Link href="/orders/search" className="text-sm font-medium hover:text-stone-800 transition-colors">
               주문조회
             </Link>
-            <Link href="#" className="hover:text-gray-500 transition-colors">
+            <Link href="/cart" className="hover:text-gray-500 transition-colors">
               <FiShoppingCart size={24} />
             </Link>
           </div>
