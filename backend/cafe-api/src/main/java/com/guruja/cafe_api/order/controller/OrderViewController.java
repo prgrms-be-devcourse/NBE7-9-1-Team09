@@ -2,6 +2,8 @@ package com.guruja.cafe_api.order.controller;
 
 import com.guruja.cafe_api.order.dto.AdminOrderResponse;
 import com.guruja.cafe_api.order.dto.OrderDto;
+import com.guruja.cafe_api.order.dto.OrderEditReqDto;
+import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +54,10 @@ public class OrderViewController {
                 .stream()
                 .map(OrderDto::new)
                 .toList();
+    }
+
+    @PutMapping("/orders/{orderId}")
+    public void editOrder(@PathVariable Long orderId, @RequestBody OrderEditReqDto orderEditReqDto) {
+        orderService.editOrder(orderId, orderEditReqDto);
     }
 }
