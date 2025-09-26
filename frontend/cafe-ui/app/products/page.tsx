@@ -12,6 +12,7 @@ const productsQueryOptions = queryOptions({
 const ProductListPage = () => {
   const { data: products } = useSuspenseQuery(productsQueryOptions);
   
+
   return (<div>
 
     <div className="px-4 py-8">
