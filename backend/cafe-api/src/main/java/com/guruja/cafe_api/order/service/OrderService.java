@@ -33,7 +33,6 @@ public class OrderService {
     public List<AdminOrderRes> getAllOrders() {
         List<Order> orders = orderRepository.findAllByOrderByDateDesc();
 
-
         return orders.stream()
                 .map(AdminOrderRes::new)
                 .collect(Collectors.toList());
@@ -63,54 +62,54 @@ public class OrderService {
 
 
     // 주문 생성 및 기존 주문에 아이템 추가
-    // 14시 이전 실행: 같은 이메일 주문이 있으면 아이템 추가, 없으면 신규 주문 생성
+    // state가 "주문완료"인 같은 이메일 주문이 있으면 아이템 추가, 없으면 신규 주문 생성
     @Transactional
     public OrderCreateReq createOrder(OrderCreateReq dto) {
         LocalDateTime now = LocalDateTime.now();
 
-        // 현재 시간이 14시 이전이면 같은 이메일 주문이 있는지 확인
-        if (now.getHour() < 14 ) {
-            Optional<Order> existingOrderOpt = orderRepository.findByEmailAndDateBetween(
-                    dto.getEmail(),
-                    now.toLocalDate().atStartOfDay(),
-                    now.toLocalDate().atTime(13, 59, 59)
-            );
+        // state가 "주문완료"인 같은 이메일 주문이 있는지 확인
+        List<Order> existingOrders = orderRepository.findByEmailAndState(
+                dto.getEmail(),
+                "주문완료"
+        );
 
-            if (existingOrderOpt.isPresent()) {
-                Order existingOrder = existingOrderOpt.get();
+        if (!existingOrders.isEmpty()) {
+            // 가장 최근 주문을 선택 (날짜 기준 내림차순)
+            Order existingOrder = existingOrders.stream()
+                    .max((o1, o2) -> o1.getDate().compareTo(o2.getDate()))
+                    .orElse(existingOrders.get(0));
 
-                // 기존 주문에 아이템 추가
-                for (OrderCreateReq.OrderItemDto newItemDto : dto.getItems()) {
-                    Product product = productRepository.findById(newItemDto.getProduct().id())
-                            .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+            // 기존 주문에 아이템 추가
+            for (OrderCreateReq.OrderItemDto newItemDto : dto.getItems()) {
+                Product product = productRepository.findById(newItemDto.getProduct().id())
+                        .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 
-                    // 동일 상품이 이미 있으면 수량만 추가
-                    Optional<OrderItem> sameProductOpt = existingOrder.getOrderItems().stream()
-                            .filter(item -> item.getProduct().getId().equals(product.getId()))
-                            .findFirst();
+                // 동일 상품이 이미 있으면 수량만 추가
+                Optional<OrderItem> sameProductOpt = existingOrder.getOrderItems().stream()
+                        .filter(item -> item.getProduct().getId().equals(product.getId()))
+                        .findFirst();
 
-                    if (sameProductOpt.isPresent()) {
-                        OrderItem same = sameProductOpt.get();
-                        same.setQuantity(same.getQuantity() + newItemDto.getQuantity());
-                    } else {
-                        // 새로운 상품 추가
-                        OrderItem newItem = OrderItem.builder()
-                                .order(existingOrder)
-                                .product(product)
-                                .quantity(newItemDto.getQuantity())
-                                .build();
-                        existingOrder.getOrderItems().add(newItem);
-                    }
-
-                    // 가격 합산
-                    existingOrder.setTotalPrice(
-                            existingOrder.getTotalPrice() + product.getPrice() * newItemDto.getQuantity()
-                    );
+                if (sameProductOpt.isPresent()) {
+                    OrderItem same = sameProductOpt.get();
+                    same.setQuantity(same.getQuantity() + newItemDto.getQuantity());
+                } else {
+                    // 새로운 상품 추가
+                    OrderItem newItem = OrderItem.builder()
+                            .order(existingOrder)
+                            .product(product)
+                            .quantity(newItemDto.getQuantity())
+                            .build();
+                    existingOrder.getOrderItems().add(newItem);
                 }
 
-                Order saved = orderRepository.save(existingOrder);
-                return toDto(saved);
+                // 가격 합산
+                existingOrder.setTotalPrice(
+                        existingOrder.getTotalPrice() + product.getPrice() * newItemDto.getQuantity()
+                );
             }
+
+            Order saved = orderRepository.save(existingOrder);
+            return toDto(saved);
         }
 
         // 신규 주문 생성
