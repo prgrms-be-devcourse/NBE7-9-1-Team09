@@ -39,6 +39,7 @@ public class OrderService {
     public List<AdminOrderResponse> getAllOrders() {
         List<Order> orders = orderRepository.findAllByOrderByDateDesc();
 
+
         return orders.stream()
                 .map(AdminOrderResponse::new)
                 .collect(Collectors.toList());
