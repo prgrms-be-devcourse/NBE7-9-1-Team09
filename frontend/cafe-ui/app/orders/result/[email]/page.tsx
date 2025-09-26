@@ -11,7 +11,6 @@ type OrderDTO = {
     orderItems: OrderItemDTO[];
 };
 
-
 type OrderItemDTO = {
     productName: string;
     quantity: number;
@@ -78,8 +77,7 @@ export default function OrdersSearchPage() {
                             <div className="text-sm">
                                 {order.orderItems.map((item, idx) => (
                                     <div key={idx}>
-                                        {item.productName}{" "}
-                                        {item.quantity > 1 ? `: ${item.quantity - 1}개` : ""}
+                                        {item.productName} : {item.quantity}개
                                     </div>
                                 ))}
                             </div>

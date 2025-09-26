@@ -3,20 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-
-type OrderDTO = {
-    orderId: number;
-    totalPrice: number;
-    state: string;
-    orderItems: OrderItemDTO[];
-};
-
-
-type OrderItemDTO = {
-    productName: string;
-    quantity: number;
-};
-
 export default function OrdersSearchPage() {
     const [emailInput, setEmailInput] = useState("");
     const router = useRouter();
