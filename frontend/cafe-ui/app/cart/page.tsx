@@ -6,17 +6,14 @@ import { useMemo, useEffect, useState } from "react";
 type Product = {
   id: number;
   name: string;
-  desc: string;
-  price: number; // KRW
+  price: number; 
   image: string;
 };
 
-// 백엔드 응답 타입 (API DTO)
+
 type BackendProduct = {
   id: number;
-  productId?: number; // when using ProductListResDto
   name: string;
-  description?: string;
   price: number;
   imageUrl?: string;
 };
@@ -47,19 +44,17 @@ export default function Page() {
   const [zipcode, setZipcode] = useState("");
   const [loading, setLoading] = useState(true);
 
-  // 백엔드 API 호출
+  
   useEffect(() => {
     fetch("http://localhost:8080/products")
       .then((res) => res.json())
       .then((data: BackendProduct[]) => {
         // 불러온 상품을 장바구니 초기화
         const initialCart: CartItem[] = data
-          .filter((p) => typeof (p.id ?? p.productId) === "number")
           .map((p) => ({
           product: {
-            id: (p.id ?? p.productId) as number,
+            id: p.id,
             name: p.name,
-            desc: (p.description as string) || "", // 목록 API엔 desc 없음
             price: p.price,
             image: (p.imageUrl as string) || "/default.png",
           },
@@ -102,18 +97,6 @@ export default function Page() {
   const submit = async () => {
     if (!email || !address || !zipcode) {
       alert("이메일/주소/우편번호를 입력해 주세요.");
-      return;
-    }
-
-    // 런타임 안전장치: 비숫자 ID가 남아있는 항목이 있으면 결제 중단
-    const invalidItems = cart.filter((ci) =>
-      typeof (ci as any).product.id !== "number" || Number.isNaN(Number((ci as any).product.id))
-    );
-    if (invalidItems.length > 0) {
-      const valid = cart.filter((ci) => !invalidItems.includes(ci));
-      setCart(valid);
-      const names = invalidItems.map((ci) => ci.product.name).join(", ");
-      alert(`유효하지 않은 상품이 제거되었습니다: ${names}. 다시 결제하기를 눌러주세요.`);
       return;
     }
 
@@ -175,7 +158,6 @@ export default function Page() {
               </div>
               <div className="flex-1">
                 <div className="font-semibold">{ci.product.name}</div>
-                <div className="text-sm text-gray-500">{ci.product.desc}</div>
                 <div className="mt-2 font-semibold">{fmt(ci.product.price)}</div>
               </div>
               <div className="flex items-center gap-2">
