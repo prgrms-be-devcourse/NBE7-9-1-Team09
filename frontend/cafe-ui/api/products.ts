@@ -4,5 +4,5 @@ import type { Product } from "@/types";
 
 export const fetchProducts = async (): Promise<Product[]> => {
   const res = await api.get('/products');
-  return res.data;
+  return res.data as Product[];
 }

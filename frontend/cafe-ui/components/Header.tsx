@@ -25,7 +25,7 @@ export default function Header() {
             <Link href="#" className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors">
               상품목록
             </Link>
-            <Link href="#" className="text-sm font-medium hover:text-stone-800 transition-colors">
+            <Link href="/orders/search" className="text-sm font-medium hover:text-stone-800 transition-colors">
               주문조회
             </Link>
             <Link href="#" className="hover:text-gray-500 transition-colors">
