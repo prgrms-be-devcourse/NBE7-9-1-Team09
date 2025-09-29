@@ -90,7 +90,7 @@ export default function AdminOrderListPage() {
                             {order.totalPrice.toLocaleString()}원
                         </span>
                         <div className="flex justify-center">
-                            <span className={`font-bold text-sm ${order.orderState === '처리중' ? 'text-[#6DA382]' : 'text-gray-900'
+                            <span className={`font-bold text-sm ${order.orderState === '상품준비중' ? 'text-[#6DA382]' : 'text-gray-900'
                                 }`}>
                                 {order.orderState}
                             </span>

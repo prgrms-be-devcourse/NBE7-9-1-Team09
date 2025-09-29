@@ -105,7 +105,7 @@ export default function Page() {
     const payload: OrderCreateRequest = {
       email,
       totalPrice: total,
-      state: "주문완료",
+      state: "상품준비중",
       address,
       addressNumber: zipcode,
       items: cart.map((ci) => ({

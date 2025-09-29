@@ -81,7 +81,7 @@ public class OrderService {
         // state가 "주문완료"인 같은 이메일 주문이 있는지 확인
         List<Order> existingOrders = orderRepository.findByEmailAndState(
                 dto.getEmail(),
-                "주문완료"
+                "상품준비중"
         );
 
         if (!existingOrders.isEmpty()) {
