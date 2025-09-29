@@ -1,15 +1,24 @@
 'use client';
 import React, { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/contexts/CartContext';
 
 interface Product {
   id: string;
   name: string;
   price: number;
+  imageUrl?: string;
+  description?: string;
 }
 
 export default function ProductInteraction({ product }: { product: Product }) {
+  const router = useRouter();
+  const { addToCart } = useCart();
   // 수량 상태 관리
   const [quantity, setQuantity] = useState(1);
+  
+  console.log('ProductInteraction mounted, product:', product);
+  console.log('useCart result:', { addToCart });
 
   // 총 가격 계산
   const totalPrice = useMemo(() => product.price * quantity, [product.price, quantity]);
@@ -21,16 +30,41 @@ export default function ProductInteraction({ product }: { product: Product }) {
 
   // 장바구니 핸들러
   const handleAddToCart = () => {
-    console.log(`${product.name} ${quantity}개를 장바구니에 담았습니다. 총 가격: ${totalPrice}원`);
+    const cartProduct = {
+      id: parseInt(product.id),
+      name: product.name,
+      price: product.price,
+      image: product.imageUrl || '/images/empty.png',
+      description: product.description
+    };
+    
+    console.log('Adding to cart:', cartProduct, 'quantity:', quantity);
+    addToCart(cartProduct, quantity);
     alert(`장바구니에 상품을 담았습니다.`);
     setQuantity(1); // 장바구니 담을 시 수량 초기화
   };
 
   // 구매하기  페이지 이동
   const handleBuyNow = () => {
-    console.log(`${product.name} ${quantity}개를 바로 구매합니다.`);
-    alert(`구매하기 페이지 개발중입니다.`);
-    // 여기에  구매하기 페이지 이동 구현
+    const cartProduct = {
+      id: parseInt(product.id),
+      name: product.name,
+      price: product.price,
+      image: product.imageUrl || '/images/empty.png',
+      description: product.description
+    };
+    
+    console.log('handleBuyNow: Adding to cart:', cartProduct, 'quantity:', quantity);
+    addToCart(cartProduct, quantity);
+    
+    // 약간의 지연을 두고 페이지 이동 (상태 업데이트가 완료될 때까지 대기)
+    setTimeout(() => {
+      console.log('handleBuyNow: Navigating to cart');
+      router.push('/cart');
+    }, 100);
+    
+    alert(`${product.name} ${quantity}개가 장바구니에 담겼습니다.`);
+    setQuantity(1); // 장바구니 담을 시 수량 초기화
   };
 
   return (
