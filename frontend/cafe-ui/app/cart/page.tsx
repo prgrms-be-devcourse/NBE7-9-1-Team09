@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/contexts/CartContext";
 
 type Product = {
   id: number;
@@ -12,12 +13,6 @@ type Product = {
 };
 
 
-type BackendProduct = {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl?: string;
-};
 
 type CartItem = {
   product: Product;
@@ -40,36 +35,12 @@ type OrderCreateRequest = {
 
 export default function Page() {
   const router = useRouter();
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { cart, updateQuantity, removeFromCart } = useCart();
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [zipcode, setZipcode] = useState("");
-  const [loading, setLoading] = useState(true);
-
   
-  useEffect(() => {
-    fetch("http://localhost:8080/products")
-      .then((res) => res.json())
-      .then((data: BackendProduct[]) => {
-        // 불러온 상품을 장바구니 초기화
-        const initialCart: CartItem[] = data
-          .map((p) => ({
-          product: {
-            id: p.id,
-            name: p.name,
-            price: p.price,
-            image: (p.imageUrl as string) || "/default.png",
-          },
-          qty: 1,
-        }));
-        setCart(initialCart);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+  console.log('Cart page rendered, cart:', cart);
 
   const total = useMemo(
     () => cart.reduce((sum, i) => sum + i.product.price * i.qty, 0),
@@ -85,16 +56,23 @@ export default function Page() {
       .format(v)
       .replace("₩", "") + " 원";
 
-  const inc = (id: number) =>
-    setCart((c) => c.map((it) => (it.product.id === id ? { ...it, qty: it.qty + 1 } : it)));
-  const dec = (id: number) =>
-    setCart((c) =>
-      c.map((it) =>
-        it.product.id === id ? { ...it, qty: Math.max(1, it.qty - 1) } : it
-      )
-    );
-  const removeItem = (id: number) =>
-    setCart((c) => c.filter((it) => it.product.id !== id));
+  const inc = (id: number) => {
+    const item = cart.find(c => c.product.id === id);
+    if (item) {
+      updateQuantity(id, item.qty + 1);
+    }
+  };
+  
+  const dec = (id: number) => {
+    const item = cart.find(c => c.product.id === id);
+    if (item) {
+      updateQuantity(id, Math.max(1, item.qty - 1));
+    }
+  };
+  
+  const removeItem = (id: number) => {
+    removeFromCart(id);
+  };
 
   const submit = async () => {
     if (!email || !address || !zipcode) {
@@ -110,7 +88,7 @@ export default function Page() {
       addressNumber: zipcode,
       items: cart.map((ci) => ({
         product: {
-          id: Number((ci as any).product.id),
+          id: ci.product.id,
         },
         quantity: ci.qty,
       })),
@@ -139,7 +117,22 @@ export default function Page() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (cart.length === 0) {
+    return (
+      <main className="flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold mb-4">장바구니가 비어있습니다</h2>
+          <p className="text-gray-600 mb-6">상품을 장바구니에 담아보세요</p>
+          <button 
+            onClick={() => router.push('/products')}
+            className="btn"
+          >
+            상품 보러가기
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
