@@ -22,5 +22,7 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     Page<Order> findAllByOrderByDateDesc(Pageable pageable);
 
     List<Order> findByDateBetween(LocalDateTime start, LocalDateTime end);
+
+    String findEmailById(Long id);
 }
 

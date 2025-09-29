@@ -15,6 +15,7 @@ export type OrderItemEditInfoRes = {
 };
 
 export type OrderEditInfoRes = {
+  orderEmail: string;
   items: OrderItemEditInfoRes[];
 };
 
@@ -24,5 +25,6 @@ export type OrderItemEditReq = {
 };
 
 export type OrderEditReq = {
+  orderTotalPrice: number;
   items: OrderItemEditReq[];
 };

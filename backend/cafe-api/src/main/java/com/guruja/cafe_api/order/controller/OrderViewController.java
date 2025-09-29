@@ -8,6 +8,8 @@ import com.guruja.cafe_api.order.entity.Order;
 import com.guruja.cafe_api.order.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -54,15 +56,17 @@ public class OrderViewController {
     }
 
     @GetMapping("/orders/{orderId}")
-    public OrderEditInfoRes editOrderInfo(@PathVariable Long orderId){
+    public ResponseEntity<?> editOrderInfo(@PathVariable Long orderId){
         OrderEditInfoRes orderEditInfoRes = orderService.editOrderInfo(orderId);
 
-        return orderEditInfoRes;
+        return new ResponseEntity<>(orderEditInfoRes, HttpStatus.OK);
     }
 
 
     @PutMapping("/orders/{orderId}")
-    public void editOrder(@PathVariable Long orderId, @RequestBody OrderEditReq orderEditReqDto) {
+    public ResponseEntity<?> editOrder(@PathVariable Long orderId, @RequestBody OrderEditReq orderEditReqDto) {
         orderService.editOrder(orderId, orderEditReqDto);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

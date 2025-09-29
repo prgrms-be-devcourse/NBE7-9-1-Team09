@@ -201,6 +201,8 @@ public class OrderService {
         //we will delete order item(we will prevent user from deleting all item in editing page in client, since we have deleting button)
         //focus on what we are editing right now and focus on its id
 
+        order.setTotalPrice(orderEditReqDto.orderTotalPrice());
+        orderRepository.save(order);
 
         for(OrderItemEditReq orderItemEditReq : orderEditReqDto.items()){
             OrderItem orderItem = orderItemRepository.findById(orderItemEditReq.orderItemId()).orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다."));
@@ -213,12 +215,15 @@ public class OrderService {
             orderItem.setQuantity(orderItemEditReq.quantity());
             orderItemRepository.save(orderItem);
         }
+
     }
 
     public OrderEditInfoRes editOrderInfo(Long orderId) {
         List<OrderItem> items = orderItemRepository.findByOrderId(orderId);
 
-        OrderEditInfoRes orderEditInfoRes = new OrderEditInfoRes(new ArrayList<>());
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("없는 주문입니다."));
+
+        OrderEditInfoRes orderEditInfoRes = new OrderEditInfoRes(order.getEmail(), new ArrayList<>());
 
         for(OrderItem item : items) {
             OrderItemEditInfoRes orderItemEditInfoRes = new OrderItemEditInfoRes(
