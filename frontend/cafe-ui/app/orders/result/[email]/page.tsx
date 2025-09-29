@@ -98,7 +98,7 @@ export default function OrdersSearchPage() {
                                             주문 취소
                                         </button>
                                         <button
-                                            onClick={() => alert("수정 페이지 이동 예정")}
+                                            onClick={() => router.replace(`/orders/${order.orderId}/edit`)}
                                             className="px-3 py-1 border rounded text-sm bg-gray-100 hover:bg-gray-200"
                                         >
                                             주문 수정

@@ -19,7 +19,7 @@ const ProductListPage = () => {
           {products?.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
-        </div>
+    </div>
       </div>
     </div>
   );
