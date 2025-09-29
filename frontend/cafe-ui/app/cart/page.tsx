@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Product = {
   id: number;
@@ -38,6 +39,7 @@ type OrderCreateRequest = {
 };
 
 export default function Page() {
+  const router = useRouter();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
@@ -128,8 +130,9 @@ export default function Page() {
         throw new Error(text || `HTTP ${res.status}`);
       }
 
-      // 성공 시 응답은 사용하지 않아도 됨
+      // 성공 시 주문조회로 이동 (이메일 기준 조회)
       alert(`주문 완료: 총 ${fmt(total)}`);
+      router.push(`/orders/result/${encodeURIComponent(email)}`);
     } catch (err) {
       console.error(err);
       alert("주문 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
