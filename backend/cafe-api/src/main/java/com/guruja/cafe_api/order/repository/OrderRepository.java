@@ -1,6 +1,8 @@
 package com.guruja.cafe_api.order.repository;
 
 import com.guruja.cafe_api.order.entity.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +18,8 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     List<Order> findAllByOrderByDateDesc();
     Optional<Order> findByEmailAndDateBetween(String email, LocalDateTime start, LocalDateTime end);
     List<Order> findByEmailAndState(String email, String state);
+  
+    Page<Order> findAllByOrderByDateDesc(Pageable pageable);
 
     List<Order> findByDateBetween(LocalDateTime start, LocalDateTime end);
 

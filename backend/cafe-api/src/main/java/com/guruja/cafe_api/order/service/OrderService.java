@@ -10,6 +10,8 @@ import com.guruja.cafe_api.product.entity.Product;
 import com.guruja.cafe_api.product.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,15 @@ public class OrderService {
                 .map(AdminOrderRes::new)
                 .collect(Collectors.toList());
     }
+
+    public Page<AdminOrderRes> getAllOrders(Pageable pageable) {
+        Page<Order> ordersPage = orderRepository.findAllByOrderByDateDesc(pageable);
+
+        return ordersPage.map(AdminOrderRes::new);
+    }
+
+
+
     public List<Order> findByEmail(String email) {
 
         List<Order> orders = orderRepository.findByEmail(email);
