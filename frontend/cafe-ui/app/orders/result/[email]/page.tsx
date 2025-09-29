@@ -51,7 +51,7 @@ export default function OrdersSearchPage() {
     return (
         <main className="max-w-4xl mx-auto p-6">
             <h1 className="text-2xl font-semibold mb-6">주문 결과</h1>
-            <div className="mb-4 text-sm text-gray-600">이메일: {email}</div>
+            <div className="mb-4 text-sm text-gray-600">이메일: {decodeURIComponent(email)}</div>
 
             {orders.length === 0 && (
                 <div className="text-gray-500">주문이 없습니다.</div>
