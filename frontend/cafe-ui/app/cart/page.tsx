@@ -35,7 +35,7 @@ type OrderCreateRequest = {
 
 export default function Page() {
   const router = useRouter();
-  const { cart, updateQuantity, removeFromCart } = useCart();
+  const { cart, updateQuantity, removeFromCart, clearCart } = useCart();
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [zipcode, setZipcode] = useState("");
@@ -110,6 +110,7 @@ export default function Page() {
 
       // 성공 시 주문조회로 이동 (이메일 기준 조회)
       alert(`주문 완료: 총 ${fmt(total)}`);
+      clearCart(); // 결제 성공 후 장바구니 비우기
       router.push(`/orders/result/${encodeURIComponent(email)}`);
     } catch (err) {
       console.error(err);
